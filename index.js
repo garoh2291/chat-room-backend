@@ -3,7 +3,13 @@ const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const rout = require("./route");
-const { addUser, findUser, getRoomUsers, removeUser } = require("./users");
+const {
+  addUser,
+  findUser,
+  getRoomUsers,
+  removeUser,
+  addRoom,
+} = require("./users");
 const app = express();
 
 app.use(cors({ origin: "*" }));
@@ -24,12 +30,18 @@ io.on("connection", (socket) => {
 
     const { user, isExist } = addUser({ name, room });
 
+    const { rooms } = addRoom(room);
+
     const userMessage = isExist
       ? `${user.name} , welcome back`
       : `Hello ${user.name}`;
 
     socket.emit("message", {
       data: { user: { name: "admin" }, message: userMessage },
+    });
+
+    socket.emit("rooms", {
+      data: { rooms },
     });
 
     socket.broadcast.to(user.room).emit("message", {

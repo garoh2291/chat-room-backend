@@ -2,6 +2,16 @@ const { trimStr } = require("./utils");
 
 let users = [];
 
+let rooms = [];
+
+const addRoom = (room) => {
+  if (!rooms.includes(trimStr(room)) && trimStr(room)) {
+    rooms.push(room);
+  }
+
+  return { rooms };
+};
+
 const findUser = (user) => {
   const userName = trimStr(user.name);
   const userRoom = trimStr(user.room);
@@ -37,4 +47,4 @@ const removeUser = (user) => {
   return found;
 };
 
-module.exports = { addUser, findUser, getRoomUsers, removeUser };
+module.exports = { addUser, findUser, getRoomUsers, removeUser, addRoom };
